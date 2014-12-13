@@ -1,9 +1,4 @@
-typedef struct {
-  float x, y, v, vx, vy, angle;
-  byte radius;
-} Ufo;
 
-Ufo player;
 
 void initPlayer(){
   player.radius = 3;
@@ -13,10 +8,22 @@ void initPlayer(){
   player.vx = 0;
   player.vy = 0;
   player.angle = 0;
+  
+  player2.radius = 3;
+  player2.x = 20;
+  player2.y = 20;
+  player2.v = 0;
+  player2.vx = 0;
+  player2.vy = 0;
+  player2.angle = 0;
 }
 
 void updatePlayer(){
-
+  if(paused)
+  {
+    return;
+  }
+  
   if(gb.buttons.repeat(BTN_RIGHT, 1)){
     player.angle += 0.31415/2;
   }
@@ -131,6 +138,19 @@ void drawPlayer(){
     gb.display.fillCircle(x_screen, y_screen, player.radius);
     gb.display.setColor(WHITE);
     gb.display.drawLine(x_screen,y_screen,x_screen+cos(player.angle)*4, y_screen+sin(player.angle)*4);
+    gb.display.setColor(BLACK);
+  }
+  drawPlayer2();
+}
+  
+  
+void drawPlayer2(){
+  int x_screen = (int)player2.x - camera_x;
+  int y_screen = (int)player2.y - camera_y;
+  if(!(x_screen < -16 || x_screen > LCDWIDTH || y_screen < -16 || y_screen > LCDHEIGHT)){
+    gb.display.fillCircle(x_screen, y_screen, player2.radius);
+    gb.display.setColor(WHITE);
+    gb.display.drawLine(x_screen,y_screen,x_screen+cos(player2.angle)*4, y_screen+sin(player2.angle)*4);
     gb.display.setColor(BLACK);
   }
 }

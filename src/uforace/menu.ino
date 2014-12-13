@@ -12,8 +12,16 @@ const char* const pauseMenu[PAUSEMENULENGTH] PROGMEM = {
   strMainMenu
 };
 
+
+const char strMaster[] PROGMEM = "Host (master)";
+const char strSlave[] PROGMEM = "Join (slave)";
+const char* const menu[2] PROGMEM = {
+  strMaster,
+  strSlave
+};
+
 void drawMenu(){
-  switch(gb.menu(pauseMenu, PAUSEMENULENGTH)){
+  /*switch(gb.menu(pauseMenu, PAUSEMENULENGTH)){
   case 0: //play
     initGame();
     play();
@@ -53,7 +61,28 @@ void drawMenu(){
   default: //title screen
     drawTitleScreen();
     break;
-  }
+  }*/
+  
+        paused = true;
+    
+      switch(gb.menu(menu, 2)){
+      case 0: //Host
+        paused = false;
+        disconnected = false;
+        isMaster = true;
+        break;
+      case 1: //Join
+        paused = false;
+        disconnected = false;
+        isMaster = false;
+        break;
+      default:
+        gb.titleScreen(F("Duel")); //shows the main menu
+        break;
+      }
+      
+    initGame();
+    play();
 }
 
 
