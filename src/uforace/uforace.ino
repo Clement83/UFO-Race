@@ -32,7 +32,7 @@ int camera_x, camera_y;
 #define PLAYER_Y 21
 #define PLAYER_A 22
 #define SLAVE_DATA_BUFFER_LENGTH 6
-
+int8_t cptStart = 60;//20 frame par seconde
 void setup()
 {
   gb.begin();
@@ -51,6 +51,7 @@ void initGame(){
   gb.battery.show = false;
   initPlayer();
   initTime();
+  cptStart= 60;
 }
 
 void play(){
@@ -62,8 +63,12 @@ void play(){
         gb.display.setFont(font5x7);
         return;
       }
-
-      updatePlayer();
+      
+      if(cptStart==0) 
+      {
+        updatePlayer();
+      }
+      
       if(isMaster)
       {
         updateMaster();
@@ -79,6 +84,25 @@ void play(){
       drawMap();
       drawTime();
       drawPlayer();
+      
+       if(!paused && cptStart>0)
+      {
+        gb.display.setColor(WHITE);
+        gb.display.fillCircle(42, 23, 6);
+        gb.display.setColor(BLACK);
+        gb.display.drawCircle(42, 23, 6);
+        gb.display.cursorX = 40;
+        gb.display.cursorY = 20;
+        gb.display.setFont(font5x7);
+        if(cptStart>40) 
+          gb.display.print(3);
+        else if(cptStart>20) 
+          gb.display.print(2);
+        else
+          gb.display.print(1);
+          
+        cptStart--;
+      }
     }
   }
 }
